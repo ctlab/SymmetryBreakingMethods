@@ -7,4 +7,3 @@ build.properties
 *.so
 *.dll
 run*.bat
-run*.sh
