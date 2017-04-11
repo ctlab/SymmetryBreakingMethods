@@ -5,3 +5,4 @@ bee*/BumbleBEE*
 bee*/BumbleSol*
 build.properties
 *.so
+*.dll
