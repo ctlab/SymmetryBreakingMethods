@@ -5,7 +5,7 @@ from subprocess import call
 
 
 def make_model_34(n, m=None, bfs=False, max_deg=False, weights=False, degs=False, lex=False, unavoid=False):
-    cmd = ["run34.bat" if platform.system() == "Windows" else "run34.sh", "-n", str(n)]
+    cmd = ["run34.bat" if platform.system() == "Windows" else "./run34.sh", "-n", str(n)]
     if m:
         cmd.append("-m")
         cmd.append(str(n))
