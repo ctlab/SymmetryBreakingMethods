@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="symmetrybreakingmethods" default="all">
+
+
+  <property environment="env"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.egg"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+    <include name="*.ane"/>
+    <include name="*.swc"/>
+    <include name="*.war"/>
+    <include name="*.zip"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${env.JAVA_HOME}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${env.JAVA_HOME}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/access-bridge-64.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunmscapi.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${env.JAVA_HOME}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.args4j-2.33.classpath">
+    <pathelement location="${basedir}/lib/args4j-2.33.jar"/>
+  </path>
+  
+  
+  <!-- Application Server Libraries -->
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module SymmetryBreakingMethods -->
+  
+  <dirname property="module.symmetrybreakingmethods.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.symmetrybreakingmethods" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.symmetrybreakingmethods" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.symmetrybreakingmethods" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.symmetrybreakingmethods" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="symmetrybreakingmethods.output.dir" value="${module.symmetrybreakingmethods.basedir}/out/production/SymmetryBreakingMethods"/>
+  <property name="symmetrybreakingmethods.testoutput.dir" value="${module.symmetrybreakingmethods.basedir}/out/test/SymmetryBreakingMethods"/>
+  
+  <path id="symmetrybreakingmethods.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="symmetrybreakingmethods.module.production.classpath">
+    <path refid="${module.jdk.classpath.symmetrybreakingmethods}"/>
+    <path refid="library.args4j-2.33.classpath"/>
+  </path>
+  
+  <path id="symmetrybreakingmethods.runtime.production.module.classpath">
+    <pathelement location="${symmetrybreakingmethods.output.dir}"/>
+    <path refid="library.args4j-2.33.classpath"/>
+  </path>
+  
+  <path id="symmetrybreakingmethods.module.classpath">
+    <path refid="${module.jdk.classpath.symmetrybreakingmethods}"/>
+    <pathelement location="${symmetrybreakingmethods.output.dir}"/>
+    <path refid="library.args4j-2.33.classpath"/>
+  </path>
+  
+  <path id="symmetrybreakingmethods.runtime.module.classpath">
+    <pathelement location="${symmetrybreakingmethods.testoutput.dir}"/>
+    <pathelement location="${symmetrybreakingmethods.output.dir}"/>
+    <path refid="library.args4j-2.33.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.symmetrybreakingmethods">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.symmetrybreakingmethods">
+    <patternset refid="excluded.from.module.symmetrybreakingmethods"/>
+  </patternset>
+  
+  <path id="symmetrybreakingmethods.module.sourcepath">
+    <dirset dir="${module.symmetrybreakingmethods.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.symmetrybreakingmethods" depends="compile.module.symmetrybreakingmethods.production,compile.module.symmetrybreakingmethods.tests" description="Compile module SymmetryBreakingMethods"/>
+  
+  <target name="compile.module.symmetrybreakingmethods.production" description="Compile module SymmetryBreakingMethods; production classes">
+    <mkdir dir="${symmetrybreakingmethods.output.dir}"/>
+    <javac destdir="${symmetrybreakingmethods.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.symmetrybreakingmethods}/javac">
+      <compilerarg line="${compiler.args.symmetrybreakingmethods}"/>
+      <bootclasspath refid="symmetrybreakingmethods.module.bootclasspath"/>
+      <classpath refid="symmetrybreakingmethods.module.production.classpath"/>
+      <src refid="symmetrybreakingmethods.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.symmetrybreakingmethods"/>
+    </javac>
+    
+    <copy todir="${symmetrybreakingmethods.output.dir}">
+      <fileset dir="${module.symmetrybreakingmethods.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.symmetrybreakingmethods.tests" depends="compile.module.symmetrybreakingmethods.production" description="compile module SymmetryBreakingMethods; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.symmetrybreakingmethods" description="cleanup module">
+    <delete dir="${symmetrybreakingmethods.output.dir}"/>
+    <delete dir="${symmetrybreakingmethods.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.symmetrybreakingmethods" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.symmetrybreakingmethods" description="build all modules"/>
+  
+  <target name="all" depends="build.modules" description="build all"/>
+</project>
