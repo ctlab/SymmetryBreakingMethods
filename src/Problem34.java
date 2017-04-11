@@ -147,7 +147,7 @@ public class Problem34 {
             String X2 = nextBool(out);
             out.println("int_eq_reif(" + var("p", i) + ", " + var("p", i + 1) + ", " + X1 + ")");
             out.println("int_geq_reif(" + var("w", i) + ", " + var("w", i + 1) + ", " + X2 + ")");
-            out.println("bool_or(-" + X1 + ", " + X2 + ")");
+            out.println("bool_array_or([-" + X1 + ", " + X2 + "])");
         }
 
         // Define weights of subtree, w[i] = 1 + sum(w[j] * bool2int(p[j] == i), j = i+1..n-1)
@@ -338,7 +338,7 @@ public class Problem34 {
         // Constraint for absence of 3-cycles, !A[i, k] || !x[i, k]
         for (int i = 0; i < nbNodes; i++) {
             for (int k = i + 1; k < nbNodes; k++) {
-                out.println("bool_or(-" + var("A", i, k) + ", -" + var("x", i, k) + ")");
+                out.println("bool_array_or([-" + var("A", i, k) + ", -" + var("x", i, k) + "])");
             }
         }
 
