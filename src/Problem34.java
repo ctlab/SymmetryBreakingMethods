@@ -63,6 +63,7 @@ public class Problem34 {
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
             parser.printUsage(System.err);
+            System.exit(1);
         }
     }
 
