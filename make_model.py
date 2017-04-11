@@ -4,7 +4,7 @@ from os import path, makedirs
 from subprocess import call
 
 
-def make_model_34(n, m=None, bfs=False, max_deg=False, weights=False, degs=False, lex=False, unavoid=False):
+def make_model_34(n, m=None, bfs=False, max_deg=False, weights=False, degs=False, lex=False, unavoid=False, unsat=False):
     cmd = ["run34.bat" if platform.system() == "Windows" else "./run34.sh", "-n", str(n)]
     if m:
         cmd.append("-m")
@@ -21,6 +21,8 @@ def make_model_34(n, m=None, bfs=False, max_deg=False, weights=False, degs=False
         cmd.append("--lex")
     if unavoid:
         cmd.append("--unavoidable")
+    if unsat:
+        cmd.append("--unsat")
     if not path.exists("models/"):
         makedirs("models/")
     index = 0

@@ -2,7 +2,7 @@ from subprocess import call
 import time
 
 
-def run_solver(filename, max_seconds=3600, solver="treengeling"):
+def run_solver(filename, max_seconds, solver):
     cmd = ["timeout", str(max_seconds), "solvers/" + solver, filename]
     start = time.time()
     ret_code = call(cmd)
@@ -13,6 +13,3 @@ def run_solver(filename, max_seconds=3600, solver="treengeling"):
         return None
     end = time.time()
     return end - start, ret_code == 10
-
-if __name__ == '__main__':
-    print run_solver("models/0.dimacs")
