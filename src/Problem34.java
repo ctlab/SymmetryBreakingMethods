@@ -213,7 +213,7 @@ public class Problem34 {
         for (int i = 0; i < edges.length; i++) {
             int[] edge = edges[i];
             int[] nextEdge = edges[(i + 1) % edges.length];
-            out.println("bool_array_or([-" + var("A", edge[0], edge[1]) + ", " + var("A", nextEdge[0], nextEdge[1]) + ")");
+            out.println("bool_array_or([-" + var("A", edge[0], edge[1]) + ", " + var("A", nextEdge[0], nextEdge[1]) + "])");
         }
     }
 
