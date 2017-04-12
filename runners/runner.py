@@ -1,11 +1,12 @@
+#!/usr/bin/env python
+
 import sys
-sys.path.append("..")
+
+sys.path.append(".")
 from test_suite import run_test
-import os
 
 
 if __name__ == '__main__':
-    os.chdir("..")
     n1 = int(sys.argv[1])
     n2 = int(sys.argv[2])
     m = None

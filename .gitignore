@@ -9,3 +9,4 @@ build.properties
 models
 *.pyc
 run
+slurm-*
