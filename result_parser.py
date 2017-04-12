@@ -103,7 +103,10 @@ def print_table_unsat(filename):
             if elem is None:
                 print(' ' * 10 + sep, end='')
             else:
-                print('{:10.4f}'.format(elem[6]) + ' & ', end='')
+                if elem[6] is None:
+                    print ('{:9.4f}+'.format(elem[3]) + sep, end='')
+                else:
+                    print('{:10.4f}'.format(elem[6]) + sep, end='')
         print()
 
 
