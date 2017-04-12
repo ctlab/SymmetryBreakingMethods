@@ -4,9 +4,9 @@ from run_solver import run_solver
 import fcntl
 
 
-def test(n, m=None, bfs=False, max_deg=False, weights=False, degs=False,
+def test(n, start, m=None, bfs=False, max_deg=False, weights=False, degs=False,
          lex=False, unavoid=False, unsat=False, max_seconds=3600, solver="treengeling"):
-    model = make_model_34(n, m, bfs, max_deg, weights, degs, lex, unavoid, unsat)
+    model = make_model_34(n, start, m, bfs, max_deg, weights, degs, lex, unavoid, unsat)
     dimacs, map_file = compile_model(model)
     time, sat = run_solver(dimacs, max_seconds, solver)
     if time is None:
@@ -16,9 +16,9 @@ def test(n, m=None, bfs=False, max_deg=False, weights=False, degs=False,
     return time, sat
 
 
-def run_test(filename, n, m=None, bfs=False, max_deg=False, weights=False, degs=False,
+def run_test(filename, n, start, m=None, bfs=False, max_deg=False, weights=False, degs=False,
              lex=False, unavoid=False, unsat=False, max_seconds=3600, solver="treengeling"):
-    time, sat = test(n, m, bfs, max_deg, weights, degs, lex, unavoid, unsat, max_seconds, solver)
+    time, sat = test(n, start, m, bfs, max_deg, weights, degs, lex, unavoid, unsat, max_seconds, solver)
     with open(filename, "a") as f:
         fcntl.flock(f, fcntl.LOCK_EX)
         f.write("[test]\n")

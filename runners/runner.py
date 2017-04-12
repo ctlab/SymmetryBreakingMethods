@@ -7,8 +7,9 @@ from test_suite import run_test
 
 
 if __name__ == '__main__':
-    n1 = int(sys.argv[1])
-    n2 = int(sys.argv[2])
+    start = int(sys.argv[1])
+    n1 = int(sys.argv[2])
+    n2 = int(sys.argv[3])
     m = None
     bfs = False
     max_deg = False
@@ -19,7 +20,7 @@ if __name__ == '__main__':
     unsat = False
     max_seconds = 3600
     solver = 'treengeling'
-    args = iter(sys.argv[3:])
+    args = iter(sys.argv[4:])
     for arg in args:
         if arg == 'm':
             m = int(next(args))
@@ -45,7 +46,7 @@ if __name__ == '__main__':
             print "Unknown argument: " + arg
             sys.exit(1)
     for n in xrange(n1, n2 + 1):
-        run_test("dumps/dump1", n, m, bfs, max_deg, weights, degs, lex, unavoid, unsat, max_seconds, solver)
+        run_test("dumps/dump1", n, start, m, bfs, max_deg, weights, degs, lex, unavoid, unsat, max_seconds, solver)
 
 
 
