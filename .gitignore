@@ -10,3 +10,4 @@ models
 *.pyc
 run
 slurm-*
+dumps/*
