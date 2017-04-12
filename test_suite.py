@@ -9,6 +9,8 @@ def test(n, m=None, bfs=False, max_deg=False, weights=False, degs=False,
     model = make_model_34(n, m, bfs, max_deg, weights, degs, lex, unavoid, unsat)
     dimacs, map_file = compile_model(model)
     time, sat = run_solver(dimacs, max_seconds, solver)
+    if time is None:
+        return None, None
     if sat == unsat:
         raise Exception("Model should be " + ("UNSAT" if unsat else "SAT") + ", but solver reports the opposite result")
     return time, sat

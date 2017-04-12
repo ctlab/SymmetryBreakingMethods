@@ -9,7 +9,7 @@ def run_solver(filename, max_seconds, solver):
     # ret_code: 124 -- timeout
     #           10  -- SAT
     #           20  -- UNSAT
-    if ret_code == 124: 
-        return None
+    if ret_code == 124:
+        return None, None
     end = time.time()
     return end - start, ret_code == 10
