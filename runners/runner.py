@@ -20,6 +20,7 @@ if __name__ == '__main__':
     unsat = False
     max_seconds = 3600
     solver = 'treengeling'
+    count = 1
     args = iter(sys.argv[4:])
     for arg in args:
         if arg == 'm':
@@ -28,6 +29,8 @@ if __name__ == '__main__':
             max_seconds = int(next(args)) 
         elif arg == 'solver':
             solver = next(args)
+        elif arg == 'count':
+            count = int(next(args))
         elif arg == 'bfs':
             bfs = True
         elif arg == 'max_deg':
@@ -45,8 +48,9 @@ if __name__ == '__main__':
         else:
             print "Unknown argument: " + arg
             sys.exit(1)
-    for n in xrange(n1, n2 + 1):
-        run_test("dumps/dump1", n, start, m, bfs, max_deg, weights, degs, lex, unavoid, unsat, max_seconds, solver)
+    for it in xrange(0, count):
+        for n in xrange(n1, n2 + 1):
+            run_test("dumps/dump1", n, start, m, bfs, max_deg, weights, degs, lex, unavoid, unsat, max_seconds, solver)
 
 
 

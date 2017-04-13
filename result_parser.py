@@ -1,4 +1,5 @@
 from __future__ import print_function
+import sys
 
 def int_none(s):
     if s == 'None':
@@ -89,8 +90,7 @@ def get(list, ident, n):
     return None
 
 
-def print_table_unsat(filename):
-    res = list(filter(lambda x: x[2], parse_results(filename)))
+def print_table(res):
     min_n = min(map(lambda x: x[0], res))
     max_n = max(map(lambda x: x[0], res))
     idents = ['000000', '100000', '110000', '111000', '111100', '000010', '000001']
@@ -110,5 +110,22 @@ def print_table_unsat(filename):
         print()
 
 
+def print_table_unsat(filename):
+    print_table(list(filter(lambda x: x[2], parse_results(filename))))
+
+
+def print_table_sat(filename):
+    print_table(list(filter(lambda x: not x[2], parse_results(filename))))
+
+
 if __name__ == '__main__':
-    print_table_unsat('dumps/dump1')
+    if len(sys.argv) > 1:
+        if sys.argv[1] == 'sat':
+            print_table_sat('dumps/dump1')
+        else:
+            print_table_unsat('dumps/dump1')
+    else:
+        print('=' * 40 + ' UNSAT ' + 40 * '=')
+        print_table_unsat('dumps/dump1')
+        print('=' * 41 + ' SAT ' + 41 * '=')
+        print_table_sat('dumps/dump1')
