@@ -1,5 +1,7 @@
 from __future__ import print_function
 import sys
+from math import sqrt, ceil, floor
+
 
 def int_none(s):
     if s == 'None':
@@ -83,11 +85,31 @@ def parse_results(filename):
     return results
 
 
-def get(list, ident, n):
+def get_all(list, ident, n):
     for elem in list:
         if elem[0] == n and elem[5] == ident:
-            return elem
-    return None
+            yield elem
+
+
+def tl_str(x, tl):
+    if x is None:
+        return '{:6.2f}+'.format(tl)
+    else:
+        return '{:7.2f}'.format(x)
+
+
+def q(s_elems, percent):
+    pos = (len(s_elems) - 1) * percent
+    l_pos = int(floor(pos))
+    r_pos = int(ceil(pos))
+    return 0.5 * (s_elems[l_pos] + s_elems[r_pos])
+
+
+def stat(elems):
+    elems = list(map(lambda x: x[3] if x[6] is None else x[6], elems))
+    mean = sum(elems) / len(elems)
+    s_elems = sorted(elems)
+    return mean, q(s_elems, 0.5), q(s_elems, 0.25), q(s_elems, 0.75)
 
 
 def print_table(res):
@@ -98,15 +120,14 @@ def print_table(res):
     for n in xrange(min_n, max_n + 1):
         print('{:5d}'.format(n) + ' & ', end='')
         for ident in idents:
-            elem = get(res, ident, n)
+            elems = list(get_all(res, ident, n))
             sep = ' \\\\' if ident == idents[-1] else ' & '
-            if elem is None:
+            if len(elems) == 0:
                 print(' ' * 10 + sep, end='')
             else:
-                if elem[6] is None:
-                    print ('{:9.4f}+'.format(elem[3]) + sep, end='')
-                else:
-                    print('{:10.4f}'.format(elem[6]) + sep, end='')
+                tl = elems[0][3]
+                mean, median, q25, q75 = stat(elems)
+                print(tl_str(median, tl) + '(' + str(len(elems)) + ')' + sep, end='')
         print()
 
 
