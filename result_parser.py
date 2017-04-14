@@ -116,7 +116,7 @@ def print_table(res):
     min_n = min(map(lambda x: x[0], res))
     max_n = max(map(lambda x: x[0], res))
     idents = ['000000', '100000', '110000', '111000', '111100', '000010', '000001']
-    print('    n &      no-sb &        bfs &   bfs + md &   bfs,md,w & bfs,md,w,d &        lex &    unavoid \\\\ ')
+    print('    n &       no-sb &         bfs &    bfs + md &    bfs,md,w &  bfs,md,w,d &         lex &     unavoid \\\\ ')
     for n in xrange(min_n, max_n + 1):
         print('{:5d}'.format(n) + ' & ', end='')
         for ident in idents:
@@ -127,7 +127,7 @@ def print_table(res):
             else:
                 tl = elems[0][3]
                 mean, median, q25, q75 = stat(elems)
-                print(tl_str(median, tl) + '(' + str(len(elems)) + ')' + sep, end='')
+                print(tl_str(median, tl) + '(' + '{:02d}'.format(len(elems)) + ')' + sep, end='')
         print()
 
 
@@ -141,7 +141,10 @@ def print_table_sat(filename):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        if sys.argv[1] == 'sat':
+        if len(sys.argv[1]) == 6:
+            for elem in get_all(filter(lambda x: not x[2], parse_results('dumps/dump1')), sys.argv[1], int(sys.argv[2])):
+                print(elem)
+        elif sys.argv[1] == 'sat':
             print_table_sat('dumps/dump1')
         else:
             print_table_unsat('dumps/dump1')
