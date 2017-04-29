@@ -20,8 +20,11 @@ public class Problem34 {
     @Option(name = "--bfs", forbids = {"--lex", "--unavoidable"}, usage = "force bfs enumeration")
     private boolean sbBfsBase = false;
 
-    @Option(name = "--start-max-deg", depends = {"--bfs"}, usage = "force start vertex to have maximum degree")
+    @Option(name = "--start-max-deg", depends = {"--bfs"}, forbids = {"--start-lex-min"}, usage = "force start vertex to have maximum degree")
     private boolean sbStartMaxDeg = false;
+
+    @Option(name = "--start-lex-min", depends = {"--bfs"}, forbids = {"--start-max-deg"}, usage = "force start vertex to have lexicographically minimal adjacency row")
+    private boolean sbStartLexMin = false;
 
     @Option(name = "--sorted-weights", depends = {"--bfs"}, usage = "force weights in each layer to be sorted")
     private boolean sbSortedWeights = false;
@@ -46,7 +49,7 @@ public class Problem34 {
 
     @Option(name = "--output", aliases = {"-o"}, metaVar = "PATH", usage = "file to write resulting model")
     private String outputPath = null;
-    
+
     @Option(name = "--help", aliases = {"-h", "--usage", "-help", "-usage"}, help = true)
     private boolean showUsage = false;
 
@@ -74,11 +77,11 @@ public class Problem34 {
         PrintWriter out = outputPath == null
                 ? new PrintWriter(System.out)
                 : new PrintWriter(outputPath);
-        
+
         declareAdjacencyMatrix(out);
         addNoThreeFourCyclesConstraint(out);
         declareDegrees(out);
-        
+
         if (sbLex) {
             addLexConstraint(out);
         }
@@ -92,7 +95,7 @@ public class Problem34 {
         if (sbBfsBase) {
             addAllBFSConstraints(out);
         }
-        
+
         out.println("solve satisfy");
         out.close();
     }
@@ -179,11 +182,14 @@ public class Problem34 {
             out.println("bool_array_or([-" + X1 + ", -" + X2 + ", " + X3 + "])");
         }
     }
-    
+
     private void addAllBFSConstraints(PrintWriter out) {
         addBFSConstraint(out);
         if (sbStartMaxDeg) {
             addStartMaxDegConstraint(out);
+        }
+        if (sbStartLexMin) {
+            addStartLexMinConstraint(out);
         }
         if (sbSortedWeights) {
             addSortedWeightsConstraint(out);
@@ -192,22 +198,36 @@ public class Problem34 {
             }
         }
     }
-    
+
+    private void addStartLexMinConstraint(PrintWriter out) {
+        for (int i = 1; i < nbNodes; i++) {
+            List<String> list0 = new ArrayList<>();
+            List<String> listI = new ArrayList<>();
+            for (int k = 0; k < nbNodes; k++) {
+                if (k != 0 && k != i) {
+                    list0.add(var("A", 0, k));
+                    listI.add(var("A", i, k));
+                }
+            }
+            out.println("bool_arrays_lex(" + list0 + ", " + listI + ")");
+        }
+    }
+
     private void addUnavoidableConstraint(PrintWriter out) {
         // Edges of unavoidable subgraph of K12 
         int[][] edges = {
-                {0, 6},       
-                {0, 7},       
-                {1, 6},       
-                {1, 7},       
-                {1, 8},       
-                {2, 6},       
-                {2, 7},       
-                {2, 8},       
-                {3, 7},       
-                {3, 8},       
-                {4, 8},       
-                {5, 8}      
+                {0, 6},
+                {0, 7},
+                {1, 6},
+                {1, 7},
+                {1, 8},
+                {2, 6},
+                {2, 7},
+                {2, 8},
+                {3, 7},
+                {3, 8},
+                {4, 8},
+                {5, 8}
         };
         // Constraint for simultaneous presence or absence of all edges 
         for (int i = 0; i < edges.length; i++) {
@@ -234,7 +254,7 @@ public class Problem34 {
             }
         }
     }
-    
+
     private void declareDegrees(PrintWriter out) {
         // Declare degree variables, degree[i]: [1..nbNodes]
         for (int i = 0; i < nbNodes; i++) {
@@ -245,7 +265,7 @@ public class Problem34 {
         out.println("new_int(max_deg, 1, " + nbNodes + ")");
         out.println("new_int(min_deg_times_max_deg, 1, " + nbNodes * nbNodes + ")");
         out.println("int_times(min_deg, max_deg, min_deg_times_max_deg)");
-        
+
         // General degrees properties
         // min_deg <= max_deg
         out.println("int_leq(min_deg, max_deg)");
@@ -253,7 +273,7 @@ public class Problem34 {
         out.println("int_geq(max_deg, " + ceilDiv(2 * nbEdges, nbNodes) + ")");
 
         // Constraints from 3,4-cycles absence
-        if (nbEdges == f4[nbNodes]) {
+        if (nbEdges >= f4[nbNodes]) {
             // min_deg * max_deg <= n - 1
             out.println("int_leq(min_deg_times_max_deg, " + (nbNodes - 1) + ")");
             // min_deg >= m - f4[n - 1];
@@ -307,7 +327,7 @@ public class Problem34 {
         }
         out.println("], " + 2 * nbEdges + ")");
     }
-    
+
     private void addNoThreeFourCyclesConstraint(PrintWriter out) {
         // Declare auxiliary variables, x[i, j, k] = A[i, j] && A[j, k] 
         for (int i = 0; i < nbNodes; i++) {
@@ -355,7 +375,7 @@ public class Problem34 {
             }
         }
     }
-    
+
     private void declareAdjacencyMatrix(PrintWriter out) {
         // Declare variables for adjacency matrix, A[u, v]: bool
         for (int i = 0; i < nbNodes; i++) {
@@ -390,6 +410,7 @@ public class Problem34 {
     }
 
     private int lastTemp = 0;
+
     private String nextBool(PrintWriter out) {
         out.println("new_bool(temp_" + lastTemp + ")");
         return "temp_" + lastTemp++;
@@ -399,7 +420,7 @@ public class Problem34 {
         out.println("new_int(temp_" + lastTemp + ", " + a + ", " + b + ")");
         return "temp_" + lastTemp++;
     }
-    
+
     public static void main(String[] args) throws FileNotFoundException {
         new Problem34(args).start();
     }
