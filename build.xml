@@ -19,17 +19,15 @@
     <exclude name="**/*.pyc/**"/>
     <exclude name="**/*.pyo/**"/>
     <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
     <exclude name="**/*~/**"/>
     <exclude name="**/.DS_Store/**"/>
     <exclude name="**/.git/**"/>
     <exclude name="**/.hg/**"/>
     <exclude name="**/.svn/**"/>
     <exclude name="**/CVS/**"/>
-    <exclude name="**/RCS/**"/>
-    <exclude name="**/SCCS/**"/>
     <exclude name="**/__pycache__/**"/>
     <exclude name="**/_svn/**"/>
-    <exclude name="**/rcs/**"/>
     <exclude name="**/vssver.scc/**"/>
     <exclude name="**/vssver2.scc/**"/>
   </patternset>
@@ -85,15 +83,32 @@
     </fileset>
   </path>
   
-  <property name="project.jdk.home" value="${env.JAVA_HOME}"/>
-  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
-  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  <property name="project.jdk.home" value=""/>
+  <property name="project.jdk.bin" value=""/>
+  <property name="project.jdk.classpath" value=""/>
   
   
   <!-- Project Libraries -->
   
   <path id="library.args4j-2.33.classpath">
     <pathelement location="${basedir}/lib/args4j-2.33.jar"/>
+  </path>
+  
+  
+  <!-- Global Libraries -->
+  
+  <path id="library.python_2.7.13_(c:\python27\python.exe)_interpreter_library.classpath">
+    <pathelement location="C:/Python27"/>
+    <pathelement location="C:/Python27/DLLs"/>
+    <pathelement location="C:/Python27/Lib"/>
+    <pathelement location="C:/Python27/Lib/lib-tk"/>
+    <pathelement location="C:/Python27/Lib/site-packages"/>
+    <pathelement location="C:/Users/Home/.IntelliJIdea2017.1/config/plugins/python/helpers/python-skeletons"/>
+    <pathelement location="C:/Users/Home/.IntelliJIdea2017.1/config/plugins/python/helpers/typeshed/stdlib/2"/>
+    <pathelement location="C:/Users/Home/.IntelliJIdea2017.1/config/plugins/python/helpers/typeshed/stdlib/2and3"/>
+    <pathelement location="C:/Users/Home/.IntelliJIdea2017.1/config/plugins/python/helpers/typeshed/third_party/2"/>
+    <pathelement location="C:/Users/Home/.IntelliJIdea2017.1/config/plugins/python/helpers/typeshed/third_party/2and3"/>
+    <pathelement location="C:/Users/Home/.IntelliJIdea2017.1/system/python_stubs/-762174762"/>
   </path>
   
   
@@ -107,9 +122,9 @@
   <dirname property="module.symmetrybreakingmethods.basedir" file="${ant.file}"/>
   
   
-  <property name="module.jdk.home.symmetrybreakingmethods" value="${project.jdk.home}"/>
-  <property name="module.jdk.bin.symmetrybreakingmethods" value="${project.jdk.bin}"/>
-  <property name="module.jdk.classpath.symmetrybreakingmethods" value="${project.jdk.classpath}"/>
+  <property name="module.jdk.home.symmetrybreakingmethods" value="${env.JAVA_HOME}"/>
+  <property name="module.jdk.bin.symmetrybreakingmethods" value="${jdk.bin.1.8}"/>
+  <property name="module.jdk.classpath.symmetrybreakingmethods" value="jdk.classpath.1.8"/>
   
   <property name="compiler.args.symmetrybreakingmethods" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
   
@@ -123,23 +138,27 @@
   <path id="symmetrybreakingmethods.module.production.classpath">
     <path refid="${module.jdk.classpath.symmetrybreakingmethods}"/>
     <path refid="library.args4j-2.33.classpath"/>
+    <path refid="library.python_2.7.13_(c:\python27\python.exe)_interpreter_library.classpath"/>
   </path>
   
   <path id="symmetrybreakingmethods.runtime.production.module.classpath">
     <pathelement location="${symmetrybreakingmethods.output.dir}"/>
     <path refid="library.args4j-2.33.classpath"/>
+    <path refid="library.python_2.7.13_(c:\python27\python.exe)_interpreter_library.classpath"/>
   </path>
   
   <path id="symmetrybreakingmethods.module.classpath">
     <path refid="${module.jdk.classpath.symmetrybreakingmethods}"/>
     <pathelement location="${symmetrybreakingmethods.output.dir}"/>
     <path refid="library.args4j-2.33.classpath"/>
+    <path refid="library.python_2.7.13_(c:\python27\python.exe)_interpreter_library.classpath"/>
   </path>
   
   <path id="symmetrybreakingmethods.runtime.module.classpath">
     <pathelement location="${symmetrybreakingmethods.testoutput.dir}"/>
     <pathelement location="${symmetrybreakingmethods.output.dir}"/>
     <path refid="library.args4j-2.33.classpath"/>
+    <path refid="library.python_2.7.13_(c:\python27\python.exe)_interpreter_library.classpath"/>
   </path>
   
   
