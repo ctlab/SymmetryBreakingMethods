@@ -129,7 +129,7 @@ def print_table(res):
             else:
                 tl = elems[0][3]
                 mean, median, q25, q75 = stat(elems)
-                print(tl_str(median, tl) + '(' + '{:02d}'.format(len(elems)) + ')' + sep, end='')
+                print(tl_str(median, tl) + sep, end='') #+ '(' + '{:02d}'.format(len(elems)) + ')' + sep, end='')
         print()
 
 
