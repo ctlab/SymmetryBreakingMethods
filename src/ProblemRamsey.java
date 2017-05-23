@@ -5,8 +5,12 @@ import org.kohsuke.args4j.Option;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
+
+import org.apache.commons.math3.util.Combinations;
 
 /**
  * @author Moklev Vyacheslav
@@ -97,32 +101,24 @@ public class ProblemRamsey {
     }
 
     private void denyColoredClique(PrintWriter out) {
-        if (redCliqueSize != 3)
-            throw new UnsupportedOperationException("redCliqueSize must be 3");
-        if (blueCliqueSize != 3)
-            throw new UnsupportedOperationException("blueCliqueSize must be 3");
-        for (int i = 0; i < nbNodes; i++) {
-            for (int j = i + 1; j < nbNodes; j++) {
-                for (int k = j + 1; k < nbNodes; k++) {
-                    out.println("bool_array_or([-" + 
-                            var("A", i, j) + ", -" + 
-                            var("A", j, k) + ", -" + 
-                            var("A", i, k) + "])"
-                    );
-                }   
-            }
-        }
-
-        for (int i = 0; i < nbNodes; i++) {
-            for (int j = i + 1; j < nbNodes; j++) {
-                for (int k = j + 1; k < nbNodes; k++) {
-                    out.println("bool_array_or([" +
-                            var("A", i, j) + ", " +
-                            var("A", j, k) + ", " +
-                            var("A", i, k) + "])"
-                    );
+        for (int[] mask: new Combinations(nbNodes, redCliqueSize)) {
+            List<String> list = new ArrayList<>();
+            for (int i = 0; i < mask.length; i++) {
+                for (int j = i + 1; j < mask.length; j++) {
+                    list.add("-" + var("A", mask[i], mask[j]));
                 }
             }
+            out.println("bool_array_or(" + list + ")");
+        }
+
+        for (int[] mask: new Combinations(nbNodes, blueCliqueSize)) {
+            List<String> list = new ArrayList<>();
+            for (int i = 0; i < mask.length; i++) {
+                for (int j = i + 1; j < mask.length; j++) {
+                    list.add(var("A", mask[i], mask[j]));
+                }
+            }
+            out.println("bool_array_or(" + list + ")");
         }
     }
 
