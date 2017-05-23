@@ -100,6 +100,10 @@ public class ProblemRamsey {
             addLexConstraint(out);
         }
         
+        if (sbBfsBase) {
+            addBFSConstraint(out);
+        }
+        
         out.println("solve satisfy");
         out.close();
     }
@@ -166,11 +170,56 @@ public class ProblemRamsey {
             }
         }
     }
+
+    private void addBFSConstraint(PrintWriter out) {
+        // Declare parents in BFS tree, p[i]: [1..i]
+        for (int i = 0; i < nbNodes; i++) {
+            out.println("new_int(" + var("p", i) + ", 0, " + i + ")");
+        }
+
+        // Define parents, FORALL i, j. p[j] = i <=> (A[i, j] && !(EXISTS k < i. A[k, j]))
+        for (int i = 0; i < nbNodes; i++) {
+            for (int j = 1; j < nbNodes; j++) {
+                String X1 = nextBool(out);
+                String X2 = nextBool(out);
+
+                // p[j] = i <=> X1
+                out.println("int_eq_reif(" + var("p", j) + ", " + i + ", " + X1 + ")");
+
+                // EXISTS k < i. A[k, j] <=> X2
+                List<String> list = new ArrayList<>();
+                for (int k = 0; k < i; k++) {
+                    list.add(var("A", k, j));
+                }
+                out.println("bool_array_or_reif(" + list + ", " + X2 + ")");
+
+                // A[i, j] && -X2 <=> X1
+                out.println("bool_and_reif(" + var("A", i, j) + ", -" + X2 + ", " + X1 + ")");
+            }
+        }
+
+        // Constraint for ordering parents, p[i] <= p[i + 1]
+        for (int i = 1; i < nbNodes - 1; i++) {
+            out.println("int_leq(" + var("p", i) + ", " + var("p", i + 1) + ")");
+        }
+    }
     
     private String var(String prefix, int... indices) {
         return prefix + Arrays.stream(indices)
                 .mapToObj(x -> "_" + x)
                 .collect(Collectors.joining());
+    }
+
+    private int lastTemp = 0;
+    
+    private String nextBool(PrintWriter out) {
+        out.println("new_bool(temp_" + lastTemp + ")");
+        return "temp_" + lastTemp++;
+    }
+
+    private String nextInt(PrintWriter out, int a, int b) {
+        out.println("new_int(temp_" + lastTemp + ", " + a + ", " + b + ")");
+        return "temp_" + lastTemp++;
     }
     
     public static void main(String[] args) throws FileNotFoundException {
