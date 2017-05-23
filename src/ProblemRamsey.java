@@ -95,6 +95,10 @@ public class ProblemRamsey {
         
         declareAdjacencyMatrix(out);
         denyColoredClique(out);
+
+        if (sbLex) {
+            addLexConstraint(out);
+        }
         
         out.println("solve satisfy");
         out.close();
@@ -145,6 +149,24 @@ public class ProblemRamsey {
         }
     }
 
+    private void addLexConstraint(PrintWriter out) {
+        for (int i = 0; i < nbNodes; i++) {
+            for (int j = i + 1; j < nbNodes; j++) {
+                if (j - i != 2) {
+                    List<String> listI = new ArrayList<>();
+                    List<String> listJ = new ArrayList<>();
+                    for (int k = 0; k < nbNodes; k++) {
+                        if (k != i && k != j) {
+                            listI.add(var("A", i, k));
+                            listJ.add(var("A", j, k));
+                        }
+                    }
+                    out.println("bool_arrays_lex(" + listI + ", " + listJ + ")");
+                }
+            }
+        }
+    }
+    
     private String var(String prefix, int... indices) {
         return prefix + Arrays.stream(indices)
                 .mapToObj(x -> "_" + x)
