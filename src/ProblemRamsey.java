@@ -252,6 +252,17 @@ public class ProblemRamsey {
         for (int i = 1; i < nbNodes - 1; i++) {
             out.println("int_leq(" + var("p", i) + ", " + var("p", i + 1) + ")");
         }
+        
+        // Prefix of vertices is roots, ∀i < j: p[i] < i => p[j] < j
+        for (int i = 0; i < nbNodes; i++) {
+            for (int j = i + 1; j < nbNodes; j++) {
+                String X1 = nextBool(out);
+                String X2 = nextBool(out);
+                out.println("int_lt_reif(" + var("p", i) + ", " + i + ", " + X1 + ")");
+                out.println("int_lt_reif(" + var("p", j) + ", " + j + ", " + X2 + ")");
+                out.println("bool_array_or([-" + X1 + ", " + X2 + "])");
+            }
+        }
     }
     
     private String var(String prefix, int... indices) {
