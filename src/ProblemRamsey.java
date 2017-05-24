@@ -102,6 +102,9 @@ public class ProblemRamsey {
         
         if (sbBfsBase) {
             addBFSConstraint(out);
+            if (sbSortedWeights) {
+                addSortedWeightsConstraint(out);
+            }
         }
         
         out.println("solve satisfy");
@@ -171,6 +174,53 @@ public class ProblemRamsey {
         }
     }
 
+    private void addSortedWeightsConstraint(PrintWriter out) {
+        // Declare weights of subtree, w[i]: [1..nbNodes - i]
+        for (int i = 0; i < nbNodes; i++) {
+            out.println("new_int(" + var("w", i) + ", 1, " + (nbNodes - i) + ")");
+        }
+
+        // Constraint for sorted weights, (p[i] != i && p[i] == p[i + 1]) => (w[i] >= w[i + 1])
+        for (int i = 0; i < nbNodes - 1; i++) {
+            String X1 = nextBool(out);
+            String X2 = nextBool(out);
+            String X3 = nextBool(out);
+            out.println("int_neq_reif(" + var("p", i) + ", " + i + ", " + X3 + ")");
+            out.println("int_eq_reif(" + var("p", i) + ", " + var("p", i + 1) + ", " + X1 + ")");
+            out.println("int_geq_reif(" + var("w", i) + ", " + var("w", i + 1) + ", " + X2 + ")");
+            out.println("bool_array_or([-" + X1 + ", -" + X3 + ", " + X2 + "])");
+        }
+
+        // Define weights of subtree, w[i] = 1 + sum(w[j] * bool2int(p[j] == i), j = i+1..n-1)
+        for (int i = 0; i < nbNodes; i++) {
+            List<String> list = new ArrayList<>();
+            for (int j = i + 1; j < nbNodes; j++) {
+                String X1 = nextBool(out);
+                String X2 = nextInt(out, 0, 1);
+                String X3 = nextInt(out, 0, nbNodes);
+                out.println("int_eq_reif(" + var("p", j) + ", " + i + ", " + X1 + ")");
+                out.println("bool2int(" + X1 + ", " + X2 + ")");
+                out.println("int_times(" + var("w", j) + ", " + X2 + ", " + X3 + ")");
+                list.add(X3);
+            }
+            list.add("1");
+            out.println("int_array_sum_eq(" + list + ", " + var("w", i) + ")");
+        }
+        
+        // Sort roots by size of component, ∀i < j: (p[i] = i && p[j] = j) => w_i <= w_j 
+        for (int i = 0; i < nbNodes; i++) {
+            for (int j = i + 1; j < nbNodes; j++) {
+                String X1 = nextBool(out);
+                String X2 = nextBool(out);
+                String X3 = nextBool(out);
+                out.println("int_eq_reif(" + var("p", i) + ", " + i + ", " + X1 + ")");
+                out.println("int_eq_reif(" + var("p", j) + ", " + j + ", " + X2 + ")");
+                out.println("int_leq_reif(" + var("w", i) + ", " + var("w", j) + ", " + X3);
+                out.println("bool_array_or([-" + X1 + ", -" + X2 + ", " + X3 + "])");
+            }
+        }
+    }
+    
     private void addBFSConstraint(PrintWriter out) {
         // Declare parents in BFS tree, p[i]: [1..i]
         for (int i = 0; i < nbNodes; i++) {
