@@ -100,6 +100,14 @@ public class ProblemRamsey {
             addLexConstraint(out);
         }
         
+        if (sbUnavoidable) {
+            if (nbNodes < 12) {
+                System.err.println("Unavoidable symmetry break available only for graphs with 12 or more nodes");
+                System.exit(1);
+            }
+            addUnavoidableConstraint(out);
+        }
+        
         if (sbBfsBase) {
             addBFSConstraint(out);
             if (sbSortedWeights) {
@@ -156,6 +164,30 @@ public class ProblemRamsey {
         }
     }
 
+    private void addUnavoidableConstraint(PrintWriter out) {
+        // Edges of unavoidable subgraph of K12 
+        int[][] edges = {
+                {0, 6},
+                {0, 7},
+                {1, 6},
+                {1, 7},
+                {1, 8},
+                {2, 6},
+                {2, 7},
+                {2, 8},
+                {3, 7},
+                {3, 8},
+                {4, 8},
+                {5, 8}
+        };
+        // Constraint for simultaneous presence or absence of all edges 
+        for (int i = 0; i < edges.length; i++) {
+            int[] edge = edges[i];
+            int[] nextEdge = edges[(i + 1) % edges.length];
+            out.println("bool_array_or([-" + var("A", edge[0], edge[1]) + ", " + var("A", nextEdge[0], nextEdge[1]) + "])");
+        }
+    }
+    
     private void addLexConstraint(PrintWriter out) {
         for (int i = 0; i < nbNodes; i++) {
             for (int j = i + 1; j < nbNodes; j++) {
