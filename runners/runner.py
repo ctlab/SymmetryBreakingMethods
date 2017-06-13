@@ -18,6 +18,7 @@ if __name__ == '__main__':
     lex = False
     unavoid = False
     unsat = False
+    weights_lex = False
     max_seconds = 3600
     solver = 'treengeling'
     count = 1
@@ -45,12 +46,14 @@ if __name__ == '__main__':
             unavoid = True
         elif arg == 'unsat':
             unsat = True
+        elif arg == 'weights_lex':
+            weights_lex = True
         else:
             print "Unknown argument: " + arg
             sys.exit(1)
     for it in xrange(0, count):
         for n in xrange(n1, n2 + 1):
-            run_test("dumps/dump1", n, start, m, bfs, max_deg, weights, degs, lex, unavoid, unsat, max_seconds, solver)
+            run_test("dumps/dump1", n=n, start=start, m=m, bfs=bfs, max_deg=max_deg, weights=weights, degs=degs, weights_lex=weights_lex, lex=lex, unavoid=unavoid, unsat=unsat, max_seconds=max_seconds, solver=solver)
 
 
 

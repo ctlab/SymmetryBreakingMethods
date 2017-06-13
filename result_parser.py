@@ -36,6 +36,7 @@ def parse_results(filename):
     max_deg = False
     weights = False
     degs = False
+    weights_lex = False
     lex = False
     unavoid = False
     unsat = False
@@ -51,6 +52,8 @@ def parse_results(filename):
         if line == '[end]':
             ident = [bfs, max_deg, weights, degs, lex, unavoid]
             ident = "".join(map(lambda x: '1' if x else '0', ident))
+            if (weights_lex):
+                ident = '010000'
             results.append((n, m, unsat, max_seconds, solver, ident, time, sat))
             continue
         arg, val = map(lambda x: x.strip(), line.split('=')[:2])
@@ -68,6 +71,8 @@ def parse_results(filename):
             max_deg = bool_none(val)
         elif arg == 'weights':
             weights = bool_none(val)
+        elif arg == 'weights_lex':
+            weights_lex = bool_none(val)
         elif arg == 'degs':
             degs = bool_none(val)
         elif arg == 'lex':
@@ -93,9 +98,9 @@ def get_all(list, ident, n):
 
 def tl_str(x, tl):
     if x is None:
-        return '{:6.2f}+'.format(tl)
+        return '{:10.2f}+'.format(tl)
     else:
-        return '{:7.2f}'.format(x)
+        return '{:11.2f}'.format(x)
 
 
 def q(s_elems, percent):
@@ -117,8 +122,8 @@ def stat(elems):
 def print_table(res):
     min_n = min(map(lambda x: x[0], res))
     max_n = max(map(lambda x: x[0], res))
-    idents = ['000000', '100000', '110000', '111000', '111100', '000010', '000001']
-    print('    n &       no-sb &         bfs &    bfs + md &    bfs,md,w &  bfs,md,w,d &         lex &     unavoid \\\\ ')
+    idents = ['000000', '100000', '110000', '111000', '111100', '000010', '000001', '010000']
+    print('    n &       no-sb &         bfs &    bfs + md &    bfs,md,w &  bfs,md,w,d &         lex &     unavoid  & weights-lex\\\\ ')
     for n in xrange(min_n, max_n + 1):
         print('{:5d}'.format(n) + ' & ', end='')
         for ident in idents:

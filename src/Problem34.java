@@ -186,12 +186,12 @@ public class Problem34 {
             out.println("bool_arrays_lex_reif(" +
                     IntStream.range(0, nbNodes - 1)
                             .filter(x -> x != finalI && x != finalI + 1)
-                            .mapToObj(x -> var("A", x, finalI))
+                            .mapToObj(x -> var("A", x, finalI + 1))
                             .collect(Collectors.toList()) +
                     ", " +
                     IntStream.range(0, nbNodes - 1)
                             .filter(x -> x != finalI && x != finalI + 1)
-                            .mapToObj(x -> var("A", x, finalI + 1))
+                            .mapToObj(x -> var("A", x, finalI))
                             .collect(Collectors.toList()) +
                     ", " + X3 + ")");
             out.println("bool_array_or([-" + X1 + ", -" + X2 + ", " + X3 + "])");
