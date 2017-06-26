@@ -243,7 +243,7 @@ public class Problem34 {
             String temp1 = nextBool(out);
             String temp2 = nextBool(out);
             out.println("int_eq_reif(" + var("degree", i) + ", max_deg, " + temp1 + ")");
-            out.println("bool_arrays_lex_reif(" + list0 + ", " + listI + ", " + temp2 + ")");
+            out.println("bool_arrays_lex_reif(" + listI + ", " + list0 + ", " + temp2 + ")");
             out.println("bool_array_or([-" + temp1 + ", " + temp2 + "])");
         }
     }
