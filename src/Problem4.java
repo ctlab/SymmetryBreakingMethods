@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @author Vyacheslav Moklev
@@ -34,6 +35,9 @@ public class Problem4 {
 
     @Option(name = "--sorted-degs", depends = {"--sorted-weights"}, usage = "force (weight, degree) in each layer to be sorted")
     private boolean sbSortedWeightsDegs = false;
+
+    @Option(name = "--sorted-weights-lex", depends = {"--sorted-weights"}, usage = "force (weight, lex) in each layer to be sorted")
+    private boolean sbSortedWeightsLex = false;
 
     @Option(name = "--lex", forbids = {"--bfs", "--unavoidable"}, usage = "enables quadratic lex sorted constraint")
     private boolean sbLex = false;
@@ -323,12 +327,39 @@ public class Problem4 {
         }
         if (sbSortedWeights) {
             addSortedWeightsConstraint(out);
+            if (sbSortedWeightsLex) {
+                addSortedLexConstraint(out);
+            }
             if (sbSortedWeightsDegs) {
                 addSortedDegsConstraint(out);
             }
         }
     }
 
+    private void addSortedLexConstraint(PrintWriter out) {
+        // Constraint order of vertices in layer, (p[i] == p[i + 1] && w[i] == w[i + 1]) => (lex[i, i + 1] <= lex[i + 1, i])
+        for (int i = 1; i < nbNodes - 1; i++) {
+            String X1 = nextBool(out);
+            String X2 = nextBool(out);
+            String X3 = nextBool(out);
+            out.println("int_eq_reif(" + var("p", i) + ", " + var("p", i + 1) + ", " + X1 + ")");
+            out.println("int_eq_reif(" + var("w", i) + ", " + var("w", i + 1) + ", " + X2 + ")");
+            int finalI = i;
+            out.println("bool_arrays_lex_reif(" +
+                    IntStream.range(0, nbNodes - 1)
+                            .filter(x -> x != finalI && x != finalI + 1)
+                            .mapToObj(x -> var("A", x, finalI + 1))
+                            .collect(Collectors.toList()) +
+                    ", " +
+                    IntStream.range(0, nbNodes - 1)
+                            .filter(x -> x != finalI && x != finalI + 1)
+                            .mapToObj(x -> var("A", x, finalI))
+                            .collect(Collectors.toList()) +
+                    ", " + X3 + ")");
+            out.println("bool_array_or([-" + X1 + ", -" + X2 + ", " + X3 + "])");
+        }
+    }
+    
     private void addStartLexMinConstraint(PrintWriter out) {
         for (int i = 1; i < nbNodes; i++) {
             List<String> list0 = new ArrayList<>();
