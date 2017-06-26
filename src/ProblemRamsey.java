@@ -47,7 +47,7 @@ public class ProblemRamsey {
     @Option(name = "--sorted-degs", depends = {"--sorted-weights"}, usage = "force (weight, degree) in each layer to be sorted")
     private boolean sbSortedWeightsDegs = false;
 
-    @Option(name = "--lex", forbids = {"--bfs", "--unavoidable"}, usage = "enables quadratic lex sorted constraint")
+    @Option(name = "--lex", forbids = {"--bfs", "--unavoidable"}, usage = "enables quadratic lex sorted constraint")    
     private boolean sbLex = false;
 
     @Option(name = "--unavoidable", forbids = {"--bfs", "--lex"}, usage = "enumerate K12 unavoidable subgraph")

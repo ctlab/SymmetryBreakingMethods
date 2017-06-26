@@ -21,10 +21,10 @@ public class Problem34 {
     @Option(name = "--bfs", forbids = {"--lex", "--unavoidable"}, usage = "force bfs enumeration")
     private boolean sbBfsBase = false;
 
-    @Option(name = "--start-max-deg", depends = {"--bfs"}, forbids = {"--start-lex-min"}, usage = "force start vertex to have maximum degree")
+    @Option(name = "--start-max-deg", depends = {"--bfs"}, usage = "force start vertex to have maximum degree")
     private boolean sbStartMaxDeg = false;
 
-    @Option(name = "--start-lex-min", depends = {"--bfs"}, forbids = {"--start-max-deg"}, usage = "force start vertex to have lexicographically minimal adjacency row")
+    @Option(name = "--start-lex-min", depends = {"--bfs", "--start-max-deg"}, usage = "force start vertex to have lexicographically minimal adjacency row")
     private boolean sbStartLexMin = false;
 
     @Option(name = "--sorted-weights", depends = {"--bfs"}, usage = "force weights in each layer to be sorted")
@@ -240,7 +240,11 @@ public class Problem34 {
                     listI.add(var("A", i, k));
                 }
             }
-            out.println("bool_arrays_lex(" + list0 + ", " + listI + ")");
+            String temp1 = nextBool(out);
+            String temp2 = nextBool(out);
+            out.println("int_eq_reif(" + var("degree", i) + ", max_deg, " + temp1 + ")");
+            out.println("bool_arrays_lex_reif(" + list0 + ", " + listI + ", " + temp2 + ")");
+            out.println("bool_array_or([-" + temp1 + ", " + temp2 + "])");
         }
     }
 
