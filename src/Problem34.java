@@ -164,6 +164,7 @@ public class Problem34 {
                 String X1 = nextBool(out);
                 String X2 = nextInt(out, 0, 1);
                 String X3 = nextInt(out, 0, nbNodes);
+                // TODO: try not to use bool2int 
                 out.println("int_eq_reif(" + var("p", j) + ", " + i + ", " + X1 + ")");
                 out.println("bool2int(" + X1 + ", " + X2 + ")");
                 out.println("int_times(" + var("w", j) + ", " + X2 + ", " + X3 + ")");
